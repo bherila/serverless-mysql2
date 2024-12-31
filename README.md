@@ -1,15 +1,18 @@
-[![Serverless MySQL](https://user-images.githubusercontent.com/2053544/79284452-ac531700-7e88-11ea-8970-81e3e649e00a.png)](https://github.com/jeremydaly/serverless-mysql/)
+[![Serverless MySQL2](https://user-images.githubusercontent.com/2053544/79284452-ac531700-7e88-11ea-8970-81e3e649e00a.png)](https://github.com/bherila/serverless-mysql2/)
 
-[![npm](https://img.shields.io/npm/v/serverless-mysql.svg)](https://www.npmjs.com/package/serverless-mysql)
-[![npm](https://img.shields.io/npm/l/serverless-mysql.svg)](https://www.npmjs.com/package/serverless-mysql)
+This is the SAME thing as Jeremy's `serverless-mysql` package, but with `mysql2` as the main dependency instead of mysql.
+The reason I made this fork, is to avoid pulling `mysql` (large package size) into my lambda functions.
+
+[![npm](https://img.shields.io/npm/v/serverless-mysql2.svg)](https://www.npmjs.com/package/serverless-mysql2)
+[![npm](https://img.shields.io/npm/l/serverless-mysql2.svg)](https://www.npmjs.com/package/serverless-mysql2)
 
 ### A module for managing MySQL connections at *serverless* scale.
 
-Serverless MySQL is a wrapper for Doug Wilson's amazing **[mysql](https://github.com/mysqljs/mysql)** Node.js module. Normally, using the `mysql` module with Node apps would be just fine. However, serverless functions (like AWS Lambda, Google Cloud Functions, and Azure Functions) scale almost infinitely by creating separate instances for each concurrent user. This is a **MAJOR PROBLEM** for RDBS solutions like MySQL, because available connections can be quickly maxed out by competing functions. Not anymore. 😀
+Serverless MySQL2 is a wrapper for the amazing **[mysql2](https://github.com/mysqljs/mysql2)** Node.js module. Normally, using the `mysql2` module with Node apps would be just fine. However, serverless functions (like AWS Lambda, Google Cloud Functions, and Azure Functions) scale almost infinitely by creating separate instances for each concurrent user. This is a **MAJOR PROBLEM** for RDBS solutions like MySQL, because available connections can be quickly maxed out by competing functions. Not anymore. 😀
 
-Serverless MySQL adds a connection management component to the `mysql` module that is designed specifically for use with serverless applications. This module constantly monitors the number of connections being utilized, and then based on your settings, manages those connections to allow thousands of concurrent executions to share them. It will clean up zombies, enforce connection limits per user, and retry connections using trusted backoff algorithms.
+Serverless MySQL2 adds a connection management component to the `mysql2` module that is designed specifically for use with serverless applications. This module constantly monitors the number of connections being utilized, and then based on your settings, manages those connections to allow thousands of concurrent executions to share them. It will clean up zombies, enforce connection limits per user, and retry connections using trusted backoff algorithms.
 
-In addition, Serverless MySQL also adds modern `async/await` support to the `mysql` module, eliminating callback hell or the need to wrap calls in promises. It also dramatically simplifies **transactions**, giving you a simple and consistent pattern to handle common workflows.
+In addition, Serverless MySQL2 also adds modern `async/await` support to the `mysql2` module, eliminating callback hell or the need to wrap calls in promises. It also dramatically simplifies **transactions**, giving you a simple and consistent pattern to handle common workflows.
 
 **NOTE:** This module *should* work with any standards-based MySQL server. It has been tested with AWS's RDS MySQL, Aurora MySQL, and Aurora Serverless.
 
@@ -17,7 +20,7 @@ In addition, Serverless MySQL also adds modern `async/await` support to the `mys
 
 ```javascript
 // Require and initialize outside of your main handler
-const mysql = require('serverless-mysql')({
+const mysql = require('serverless-mysql2')({
   config: {
     host     : process.env.ENDPOINT,
     database : process.env.DATABASE,
@@ -28,20 +31,23 @@ const mysql = require('serverless-mysql')({
 
 // Main handler function
 exports.handler = async (event, context) => {
-  // Run your query
-  let results = await mysql.query('SELECT * FROM table')
+  try {
+    // Run your query
+    let results: any[] = await mysql.query('SELECT * FROM table')
 
-  // Run clean up function
-  await mysql.end()
-
-  // Return the results
-  return results
+    // Return the results
+    return results
+  }
+  finally {
+    // Run clean up function
+    await mysql.end()
+  }
 }
 ```
 
 ## Installation
 ```
-npm i serverless-mysql
+yarn add serverless-mysql2
 ```
 
 ## Requirements
@@ -63,10 +69,10 @@ To use Serverless MySQL, require it **OUTSIDE** your main function handler. This
 
 ```javascript
 // Require and initialize with default options
-const mysql = require('serverless-mysql')() // <-- initialize with function call
+const mysql = require('serverless-mysql2')() // <-- initialize with function call
 
 // OR include configuration options
-const mysql = require('serverless-mysql')({
+const mysql = require('serverless-mysql2')({
   backoff: 'decorrelated',
   base: 5,
   cap: 200
