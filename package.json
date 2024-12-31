@@ -1,37 +1,38 @@
 {
-  "name": "serverless-mysql",
+  "name": "serverless-mysql2",
   "version": "1.5.5",
-  "description": "A module for managing MySQL connections at serverless scale.",
+  "description": "A module for managing MySQL2 connections at serverless scale.",
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
     "test": "mocha --check-leaks --recursive",
     "test-cov": "nyc --reporter=html mocha --check-leaks --recursive",
-    "test-ci": "nyc npm test && nyc report --reporter=text-lcov | ./node_modules/coveralls/bin/coveralls.js",
+    "test-ci": "nyc yarn test && nyc report --reporter=text-lcov | ./node_modules/coveralls/bin/coveralls.js",
     "lint": "eslint .",
-    "prepublishOnly": "npm run lint && npm run test"
+    "prepublishOnly": "yarn run lint && yarn run test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jeremydaly/serverless-mysql.git"
+    "url": "git+https://github.com/bherila/serverless-mysql2.git"
   },
   "keywords": [
     "serverless",
     "mysql",
+    "mysql2",
     "max_connections",
     "scalability",
     "rds",
     "aurora serverless",
     "aurora"
   ],
-  "author": "Jeremy Daly <jeremy@jeremydaly.com>",
+  "author": "Ben Herila <ben@herila.net>, Jeremy Daly <jeremy@jeremydaly.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jeremydaly/serverless-mysql/issues"
+    "url": "https://github.com/bherila/serverless-mysql2/issues"
   },
-  "homepage": "https://github.com/jeremydaly/serverless-mysql#readme",
+  "homepage": "https://github.com/bherila/serverless-mysql2#readme",
   "dependencies": {
-    "mysql": "^2.18.1"
+    "mysql2": "^3.12.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
@@ -42,9 +43,6 @@
     "nyc": "^14.1.1",
     "rewire": "^4.0.1",
     "sinon": "^6.3.5"
-  },
-  "optionalDependencies": {
-    "@types/mysql": "^2.15.6"
   },
   "files": [
     "LICENSE",
