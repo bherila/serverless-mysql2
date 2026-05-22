@@ -47,7 +47,7 @@ exports.handler = async (event, context) => {
 
 ## Installation
 ```
-yarn add serverless-mysql2
+pnpm add serverless-mysql2
 ```
 
 ## Requirements
